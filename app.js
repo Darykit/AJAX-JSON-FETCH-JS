@@ -1,33 +1,24 @@
 const btn = document.querySelector('.btn');
-const url = './api/people.json'
-btn.addEventListener('click', () => {
-  getData(url)
-});
+const url = './api/people.json';
 
-function getData(url){
- const xhr = new XMLHttpRequest()
- console.log(xhr)
- xhr.open("GET", url)
- xhr.onreadystatechange = function () {
-   if (xhr.readyState === 4 && xhr.status === 200) {
-    const data = JSON.parse(xhr.responseText);
-    console.log(typeof data);
+btn.addEventListener('click', ()=>{
+ fetch(url)
+   .then((resp) => {
+     return resp.json()
+   })
+   .then((data) => {
+     displayItems(data)
+   })
+   .catch((err) => {
+     console.log(err)
+   })
+})
 
-    const displayData = data.map((item) => {
-     return `<p>${item.name}</p>`;
-    }).join('');
-    const element = document.createElement('div');
-    element.innerHTML = displayData;
-    document.body.appendChild(element)
-    
-    
-     // const text = document.createElement("p")
-     // text.textContent = xhr.responseText
-     // document.body.appendChild(text)
-   } else {
-     console.log({ status: xhr.status, text: xhr.statusText })
-   }
- }
- xhr.send()
-}
-
+const displayItems = (items)=>{
+  const displayData = items.map((item)=>{
+   // const {name} = item;
+   return `<p>${item.name}<p/>`
+  }).join('');
+  const element = document.createElement("div")
+  element.innerHTML = displayData
+  document.body.appendChild(element)}
